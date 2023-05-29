@@ -22,16 +22,26 @@ class AppStorage {
     return await AppStorage()._init();
   }
 
-  UserInfo? get userDetail {
+  UserModel? get userDetail {
     final userRawJson = _box.get("user_detail");
     if (userRawJson is String) {
-      return UserInfo.fromRawJson(userRawJson);
+      return UserModel.fromRawJson(userRawJson);
     }
     return null;
   }
 
-  set userDetail(UserInfo? userInfo) =>
+  set userDetail(UserModel? userInfo) =>
       _box.put("user_detail", userInfo?.toRawJson());
 
-  bool isLoggedIn() => userDetail?.id != null;
+  bool isLoggedIn() => userDetail?.uid != null;
+
+  bool isOnBoardingShowed() {
+    final onBoardingShowed = _box.get("onBoardingShowed") ?? false;
+    if (onBoardingShowed is bool) {
+      return onBoardingShowed;
+    }
+    return false;
+  }
+
+  onBoardingShowed(bool newval) => _box.put("onBoardingShowed", newval);
 }

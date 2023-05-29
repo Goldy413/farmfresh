@@ -10,12 +10,10 @@ class CustomMaterialButton extends StatelessWidget {
     required this.onPressed,
     this.gradient = const LinearGradient(
       colors: <Color>[
-        Color(0XFFFFBF00),
-        Color(0XFFC92434),
-        Color(0XFF003D5B),
-        Color(0XFFFFBF00),
-
-        // Colors.amber, Colors.black
+        Color(0XFF07602E),
+        Color(0XFF238438),
+        Color(0XFF38AF37),
+        Color(0XFF07602E),
       ],
     ),
   });

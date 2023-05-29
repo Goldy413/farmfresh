@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    // flutter build apk --release --dart-define APP_NAME=FarmFresh
+    "configurations": [
+        {
+            "name": "farmfresh-staging-debug",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define",
+                "APP_NAME=FarmFresh-Staging",
+            ]
+        },
+        {
+            "name": "farmfresh-prod-profile",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "toolArgs": [
+                "--dart-define",
+                "APP_NAME=FarmFresh",
+            ]
+        },
+        {
+            "name": "farmfresh-prod-release",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "toolArgs": [
+                "--dart-define",
+                "APP_NAME=FarmFresh",
+            ]
+        }
+    ]
+}

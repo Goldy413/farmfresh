@@ -1,10 +1,13 @@
 import 'package:farmfresh/routes.dart';
 import 'package:farmfresh/utility/app_storage.dart';
 import 'package:farmfresh/utility/custom_scroll_behaviour.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await AppStorage.objectValue();
   runApp(MyApp());
 }
@@ -14,11 +17,11 @@ class MyApp extends StatelessWidget {
 
   final ThemeData _lightTheme = ThemeData.light(useMaterial3: true).copyWith(
       colorScheme: ThemeData.light(useMaterial3: true).colorScheme.copyWith(
-            primary: const Color(0XFF003D5B),
+            primary: const Color(0XFF238438),
             onPrimary: const Color(0XFFFFBF00),
             background: const Color(0xFFF8F8F8),
           ),
-      primaryColor: const Color(0XFF003D5B),
+      primaryColor: const Color(0XFF238438),
       buttonTheme: const ButtonThemeData(
         buttonColor: Color(0XFFFFBF00),
         disabledColor: Colors.white,
@@ -26,10 +29,10 @@ class MyApp extends StatelessWidget {
 
   final ThemeData _darkTheme = ThemeData.light(useMaterial3: true).copyWith(
       colorScheme: ThemeData.light(useMaterial3: true).colorScheme.copyWith(
-          primary: const Color(0XFF003D5B),
+          primary: const Color(0XFF238438),
           onPrimary: const Color(0XFFFFBF00),
           onBackground: const Color(0xFF232323)),
-      primaryColor: const Color(0XFF003D5B),
+      primaryColor: const Color(0XFF238438),
       buttonTheme: const ButtonThemeData(
         buttonColor: Color(0XFFFFBF00),
         disabledColor: Colors.white,
