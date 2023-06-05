@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmfresh/module/login_module/model/login_model.dart';
+import 'package:farmfresh/utility/app_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class VerificationRepository {
@@ -30,8 +31,10 @@ class VerificationRepository {
 
   // DATABASE OPERTAIONS
   Future<bool> checkExistingUser(String uid) async {
-    DocumentSnapshot snapshot =
-        await FirebaseFirestore.instance.collection("users").doc(uid).get();
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection(CollectionConstant.user)
+        .doc(uid)
+        .get();
     if (snapshot.exists) {
       //print("USER EXISTS");
       return true;
@@ -44,7 +47,7 @@ class VerificationRepository {
   Future<void> getDataFromFirestore(
       String uid, Function(UserModel userModel) userCallBack) async {
     await FirebaseFirestore.instance
-        .collection("users")
+        .collection(CollectionConstant.user)
         .doc(uid)
         .get()
         .then((DocumentSnapshot snapshot) {
