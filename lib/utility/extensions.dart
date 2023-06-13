@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:farmfresh/module/product_module/product_detail_module/model/product_model.dart';
 import 'package:flutter/material.dart';
 
 extension BuildContextHelper on BuildContext {
@@ -11,5 +14,63 @@ extension EmailValidator on String {
     return RegExp(
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
         .hasMatch(this);
+  }
+}
+
+extension FileNameExtension on File {
+  String getFileName() {
+    String fileName = path.split('/').last;
+    return fileName;
+  }
+}
+
+extension ColorExtension on String {
+  toColor() {
+    var hexString = this;
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+}
+
+extension Price on ProductItem {
+  getPrice({isSingleLine = false}) {
+    return actualPrice != discountPrice
+        ? Text.rich(
+            textAlign: TextAlign.center,
+            TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                  text: 'Rs.$actualPrice',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w500,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+                isSingleLine
+                    ? const TextSpan(text: " ")
+                    : const TextSpan(text: "\n"),
+                TextSpan(
+                  text: 'Rs.$discountPrice',
+                  style: const TextStyle(
+                      fontSize: 17.0, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          )
+        : discountPrice.isNotEmpty
+            ? Text(
+                'Rs.$discountPrice',
+                style: const TextStyle(
+                    fontSize: 17.0, fontWeight: FontWeight.w600),
+              )
+            : Text(
+                'Rs.$actualPrice',
+                style: const TextStyle(
+                    fontSize: 17.0, fontWeight: FontWeight.w600),
+              );
   }
 }

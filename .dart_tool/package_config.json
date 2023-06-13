@@ -440,6 +440,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "simple_speed_dial",
+      "rootUri": "file:///home/vishal/.pub-cache/hosted/pub.dev/simple_speed_dial-0.1.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///home/vishal/snap/flutter/common/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -536,7 +542,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-05-29T12:56:53.124286Z",
+  "generated": "2023-06-10T07:02:54.491391Z",
   "generator": "pub",
   "generatorVersion": "3.0.1"
 }

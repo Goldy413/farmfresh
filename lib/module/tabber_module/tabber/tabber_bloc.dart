@@ -1,6 +1,6 @@
 import 'package:farmfresh/module/account_module/account_view.dart';
 import 'package:farmfresh/module/bag_module/bag_view.dart';
-import 'package:farmfresh/module/category_module/category_view.dart';
+import 'package:farmfresh/module/category_module/category_home_module/category_view.dart';
 import 'package:farmfresh/module/home_module/home_view.dart';
 import 'package:farmfresh/module/tabber_module/model/tabber_model.dart';
 import 'package:farmfresh/utility/app_constants.dart';
