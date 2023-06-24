@@ -48,3 +48,65 @@ class UserModel {
     };
   }
 }
+
+class Address {
+  Address({
+    required this.id,
+    required this.name,
+    required this.house,
+    required this.address,
+    required this.pin,
+    required this.city,
+    required this.state,
+    required this.latitude,
+    required this.logitude,
+    required this.contactNo,
+    required this.userId,
+    required this.type,
+  });
+  late String id;
+  late String name;
+  late String house;
+  late String address;
+  late String pin;
+  late String city;
+  late String state;
+  late double latitude;
+  late double logitude;
+  late String contactNo;
+  late String userId;
+  late String type;
+  bool isSelected = false;
+
+  Address.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    house = json['house'];
+    address = json['address'];
+    pin = json['pin'];
+    city = json['city'];
+    state = json['state'];
+    latitude = json['latitude'];
+    logitude = json['logitude'];
+    contactNo = json['contactNo'];
+    userId = json['userId'];
+    type = json['type'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['house'] = house;
+    data['address'] = address;
+    data['pin'] = pin;
+    data['city'] = city;
+    data['state'] = state;
+    data['latitude'] = latitude;
+    data['logitude'] = logitude;
+    data['contactNo'] = contactNo;
+    data['userId'] = userId;
+    data['type'] = type;
+    return data;
+  }
+}

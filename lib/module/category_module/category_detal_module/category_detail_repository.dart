@@ -65,6 +65,7 @@ class CategoryDetailRepository {
     FirebaseFirestore.instance
         .collection(CollectionConstant.product)
         .where("subCategoryId", isEqualTo: subCategory.id)
+        .where('isActive', isEqualTo: true)
         .snapshots()
         .listen((product) {
       List<ProductItem> productItem = <ProductItem>[];
@@ -73,6 +74,25 @@ class CategoryDetailRepository {
             .add(ProductItem.fromJson(dataRef.data() as Map<String, dynamic>));
       }
       // subCategory.productItem = productItem;
+      productCallback(productItem);
+    });
+  }
+
+  Future<void> getCategoryProduct(
+      {required Function(List<ProductItem> productItem) productCallback,
+      required CategoryItem category}) async {
+    FirebaseFirestore.instance
+        .collection(CollectionConstant.product)
+        .where('categoryId', isEqualTo: category.id)
+        .where("subCategoryId", isEqualTo: "")
+        .where('isActive', isEqualTo: true)
+        .snapshots()
+        .listen((product) {
+      List<ProductItem> productItem = <ProductItem>[];
+      for (DocumentSnapshot dataRef in product.docs) {
+        productItem
+            .add(ProductItem.fromJson(dataRef.data() as Map<String, dynamic>));
+      }
       productCallback(productItem);
     });
   }

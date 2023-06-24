@@ -20,7 +20,8 @@ class CategoryDetailView extends StatelessWidget {
           create: (context) => CategoryDetailRepository(),
           child: BlocProvider(
             create: (context) => CategoryDetailBloc(category, context.read())
-              ..add(GetSubCategory()),
+              ..add(GetSubCategory())
+              ..add(GetCategoryProduct()),
             child: CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -227,6 +228,147 @@ class CategoryDetailView extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            bloc.independentProductItem.isNotEmpty
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Products",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.w600),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 0.0, vertical: 0.0),
+                                          child: GridView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              padding: const EdgeInsets.all(0),
+                                              shrinkWrap: true,
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing: 5.0,
+                                                mainAxisSpacing: 5.0,
+                                              ),
+                                              itemCount: bloc
+                                                  .independentProductItem
+                                                  .length,
+                                              itemBuilder: (context, index) =>
+                                                  InkWell(
+                                                    onTap: () => {
+                                                      context.push(
+                                                          AppPaths.product,
+                                                          extra:
+                                                              bloc.independentProductItem[
+                                                                  index])
+                                                    },
+                                                    child: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5),
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .cardColor,
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                      .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          5)),
+                                                          boxShadow: const [
+                                                            BoxShadow(
+                                                              offset:
+                                                                  Offset(1, 1),
+                                                              blurRadius: 2,
+                                                              color:
+                                                                  Colors.grey,
+                                                            )
+                                                          ]),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Expanded(
+                                                            child:
+                                                                Image.network(
+                                                              bloc
+                                                                  .independentProductItem[
+                                                                      index]
+                                                                  .image,
+                                                              fit: BoxFit.fill,
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        2),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                    bloc
+                                                                        .independentProductItem[
+                                                                            index]
+                                                                        .name,
+                                                                    style: Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .titleMedium
+                                                                        ?.copyWith(
+                                                                            fontWeight:
+                                                                                FontWeight.w500)),
+                                                                const SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                bloc.independentProductItem[
+                                                                        index]
+                                                                    .getPrice()
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            bloc
+                                                                .independentProductItem[
+                                                                    index]
+                                                                .desc,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 1,
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .black87,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )))
+                                    ],
+                                  )
+                                : const SizedBox(),
                             const SizedBox(
                               height: 80,
                             ),

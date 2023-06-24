@@ -7,6 +7,8 @@ class ProductDetailInitial extends ProductDetailState {}
 
 class LoadingStatusState extends ProductDetailState {}
 
+class ChangeState extends ProductDetailState {}
+
 class ProductDetailErrorState extends ProductDetailState {
   final String message;
   ProductDetailErrorState(this.message);
@@ -15,4 +17,10 @@ class ProductDetailErrorState extends ProductDetailState {
 class StateChangeState extends ProductDetailState {
   final ProductItem productItem;
   StateChangeState(this.productItem);
+}
+
+class ProductAddState extends ProductDetailState {
+  final String name;
+  final String qty;
+  ProductAddState(this.name, this.qty);
 }

@@ -12,6 +12,7 @@ class CategoryDetailBloc
   final CategoryItem category;
   final CategoryDetailRepository repo;
   List<SubCategoryItem> subCategoryItem = <SubCategoryItem>[];
+  List<ProductItem> independentProductItem = [];
   CategoryDetailBloc(this.category, this.repo)
       : super(CategoryDetailInitial()) {
     on<CategoryDetailEvent>((event, emit) {});
@@ -48,5 +49,10 @@ class CategoryDetailBloc
               // emit(SubCategorySuccesfully())
               add(ChangeSubCategory())
             }));
+
+    on<GetCategoryProduct>((event, emit) async => await repo.getCategoryProduct(
+        productCallback: (List<ProductItem> productItem) =>
+            {independentProductItem = productItem, add(ChangeSubCategory())},
+        category: category));
   }
 }

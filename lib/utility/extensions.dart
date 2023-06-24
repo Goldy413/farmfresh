@@ -34,6 +34,13 @@ extension ColorExtension on String {
   }
 }
 
+extension Amount on double {
+  String toformat() {
+    var price = this;
+    return "₹ ${price.toStringAsFixed(2)}";
+  }
+}
+
 extension Price on ProductItem {
   getPrice({isSingleLine = false}) {
     return actualPrice != discountPrice
@@ -42,7 +49,7 @@ extension Price on ProductItem {
             TextSpan(
               children: <TextSpan>[
                 TextSpan(
-                  text: 'Rs.$actualPrice',
+                  text: '₹ ${actualPrice.toStringAsFixed(2)}',
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 14.0,
@@ -54,21 +61,21 @@ extension Price on ProductItem {
                     ? const TextSpan(text: " ")
                     : const TextSpan(text: "\n"),
                 TextSpan(
-                  text: 'Rs.$discountPrice',
+                  text: '₹ ${discountPrice.toStringAsFixed(2)}',
                   style: const TextStyle(
                       fontSize: 17.0, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
           )
-        : discountPrice.isNotEmpty
+        : discountPrice == 0.0
             ? Text(
-                'Rs.$discountPrice',
+                '₹ $discountPrice',
                 style: const TextStyle(
                     fontSize: 17.0, fontWeight: FontWeight.w600),
               )
             : Text(
-                'Rs.$actualPrice',
+                '₹ $actualPrice',
                 style: const TextStyle(
                     fontSize: 17.0, fontWeight: FontWeight.w600),
               );

@@ -17,8 +17,8 @@ class ProductItem {
   });
   late String id;
   late String name;
-  late String actualPrice;
-  late String discountPrice;
+  late double actualPrice;
+  late double discountPrice;
   late String categoryId;
   late String categoryName;
   late String subCategoryName;
@@ -37,8 +37,9 @@ class ProductItem {
   ProductItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    actualPrice = json['actualPrice'];
-    discountPrice = json['discountPrice'];
+    actualPrice = double.tryParse(json['actualPrice'] ?? "0.0") ?? 0.0;
+    discountPrice = double.tryParse(json['discountPrice'] ?? "0.0") ?? 0.0;
+
     categoryId = json['categoryId'];
     categoryName = json['categoryName'];
     subCategoryName = json['subCategoryName'];
@@ -103,11 +104,11 @@ class ProductSize {
     required this.price,
   });
   late String name;
-  late String price;
+  late double price;
 
   ProductSize.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    price = json['price'];
+    price = double.parse(json['price'] ?? "0.0");
   }
 
   Map<String, dynamic> toJson() {
@@ -126,12 +127,12 @@ class ProductColor {
   });
   late String name;
   late String color;
-  late String price;
+  late double price;
 
   ProductColor.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     color = json['color'];
-    price = json['price'];
+    price = double.parse(json['price'] ?? "0.0");
   }
 
   Map<String, dynamic> toJson() {

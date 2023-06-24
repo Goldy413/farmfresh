@@ -13,13 +13,14 @@ class ProfileRepository {
       String phone, File image,
       {required Function(UserModel userModel) onComplete}) async {
     UserModel userModel = UserModel(
-        uid: uid,
-        name: name,
-        email: email,
-        bio: bio,
-        phoneNumber: phone,
-        profilePic: "",
-        createdAt: "");
+      uid: uid,
+      name: name,
+      email: email,
+      bio: bio,
+      phoneNumber: phone,
+      profilePic: "",
+      createdAt: "",
+    );
     try {
       await storeFileToStorage("profilePic/$uid", image).then((value) {
         userModel.profilePic = value;
@@ -64,19 +65,22 @@ class ProfileRepository {
   Future<void> getDataFromFirestore(
       String uid, Function(UserModel userModel) userCallBack) async {
     await FirebaseFirestore.instance
-        .collection("users")
+        .collection(CollectionConstant.user)
         .doc(uid)
         .get()
         .then((DocumentSnapshot snapshot) {
-      UserModel userModel = UserModel(
-        name: snapshot['name'],
-        email: snapshot['email'],
-        createdAt: snapshot['createdAt'],
-        bio: snapshot['bio'],
-        uid: snapshot['uid'],
-        profilePic: snapshot['profilePic'],
-        phoneNumber: snapshot['phoneNumber'],
-      );
+      UserModel userModel = UserModel.fromMap(snapshot as Map<String, dynamic>);
+
+      // UserModel(
+      //   name: snapshot['name'],
+      //   email: snapshot['email'],
+      //   createdAt: snapshot['createdAt'],
+      //   bio: snapshot['bio'],
+      //   uid: snapshot['uid'],
+      //   profilePic: snapshot['profilePic'],
+      //   phoneNumber: snapshot['phoneNumber'],
+      //   address:
+      // );
 
       userCallBack(userModel);
     });

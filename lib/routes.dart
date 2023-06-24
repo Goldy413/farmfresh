@@ -1,5 +1,8 @@
+import 'package:farmfresh/module/bag_module/model/bag_model.dart';
 import 'package:farmfresh/module/category_module/category_detal_module/category_detail_view.dart';
 import 'package:farmfresh/module/category_module/category_home_module/model/category.dart';
+import 'package:farmfresh/module/checkout_module/checkout_view.dart';
+import 'package:farmfresh/module/delivery_addess_module/add_address_module/add_address_view.dart';
 import 'package:farmfresh/module/login_module/login_view.dart';
 import 'package:farmfresh/module/on_bording_module/onboarding_view.dart';
 import 'package:farmfresh/module/product_module/product_detail_module/model/product_model.dart';
@@ -9,6 +12,7 @@ import 'package:farmfresh/module/splash_module/splash_view.dart';
 import 'package:farmfresh/module/tabber_module/tabber_view.dart';
 import 'package:farmfresh/module/verification_module/verification_view.dart';
 import 'package:go_router/go_router.dart';
+import 'package:place_picker/entities/location_result.dart';
 
 final router = GoRouter(initialLocation: AppPaths.initial, routes: [
   GoRoute(
@@ -59,6 +63,18 @@ final router = GoRouter(initialLocation: AppPaths.initial, routes: [
     builder: (context, state) =>
         ProductDetailView(productItem: state.extra as ProductItem),
   ),
+  GoRoute(
+    path: AppPaths.checkout,
+    name: AppPaths.checkout,
+    builder: (context, state) =>
+        CheckoutView(bagModel: state.extra as BagModel),
+  ),
+  GoRoute(
+    path: AppPaths.addaddress,
+    name: AppPaths.addaddress,
+    builder: (context, state) =>
+        AddAddressView(location: state.extra as LocationResult),
+  ),
 ]);
 
 class AppPaths {
@@ -74,4 +90,6 @@ class AppPaths {
   static const categoryDetail = "/categoryDetail";
   static const addSubCategory = "/addSubCategory";
   static const product = "/product";
+  static const checkout = "/checkout";
+  static const addaddress = "/addaddress";
 }

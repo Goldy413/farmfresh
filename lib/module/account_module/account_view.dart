@@ -54,7 +54,7 @@ class AccountView extends StatelessWidget {
                             AppStorage().userDetail?.name ?? "",
                             style: Theme.of(context)
                                 .textTheme
-                                .titleLarge
+                                .headlineMedium
                                 ?.copyWith(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold),
@@ -77,7 +77,7 @@ class AccountView extends StatelessWidget {
                                 AppStorage().userDetail?.email ?? "",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleLarge
+                                    .headlineMedium
                                     ?.copyWith(
                                         fontSize: 14.sp,
                                         color: Colors.black,
@@ -103,7 +103,7 @@ class AccountView extends StatelessWidget {
                                 AppStorage().userDetail?.phoneNumber ?? "",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleLarge
+                                    .headlineLarge
                                     ?.copyWith(
                                         fontSize: 14.sp,
                                         color: Colors.black,
@@ -130,7 +130,7 @@ class AccountView extends StatelessWidget {
                                 'Bio : ${AppStorage().userDetail?.bio ?? ""}',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleLarge
+                                    .headlineMedium
                                     ?.copyWith(
                                         fontSize: 14.sp,
                                         color: Colors.black,
@@ -147,6 +147,8 @@ class AccountView extends StatelessWidget {
                     text: "Logout",
                     onPressed: () => {},
                   )
-                ])));
+                ]))
+                
+                );
   }
 }

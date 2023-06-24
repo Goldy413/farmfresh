@@ -1,3 +1,4 @@
+import 'package:farmfresh/module/bag_module/model/bag_model.dart';
 import 'package:farmfresh/module/login_module/model/login_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -32,6 +33,17 @@ class AppStorage {
 
   set userDetail(UserModel? userInfo) =>
       _box.put("user_detail", userInfo?.toRawJson());
+
+  BagModel? get userBag {
+    final userRawJson = _box.get("user_bag");
+    if (userRawJson is String) {
+      return BagModel.fromRawJson(userRawJson);
+    }
+    return null;
+  }
+
+  set userBag(BagModel? userInfo) =>
+      _box.put("user_bag", userInfo?.toRawJson());
 
   bool isLoggedIn() => userDetail?.uid != null;
 

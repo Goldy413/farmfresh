@@ -10,6 +10,8 @@ class CategoryStatusEvent extends CategoryDetailEvent {
 
 class GetSubCategory extends CategoryDetailEvent {}
 
+class GetCategoryProduct extends CategoryDetailEvent {}
+
 class ChangeSubCategory extends CategoryDetailEvent {}
 
 class GetSubCategoryProduct extends CategoryDetailEvent {
