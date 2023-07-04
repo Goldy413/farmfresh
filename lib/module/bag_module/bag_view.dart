@@ -19,7 +19,10 @@ class BagView extends StatelessWidget {
     return RepositoryProvider(
       create: (context) => BagRepository(),
       child: BlocProvider(
-        create: (context) => BagBloc(context.read())..add(GetBagEvent()),
+        create: (context) => BagBloc(context.read())
+          ..add(GetBagEvent())
+          ..add(GetAddressEvent())
+          ..add(GetDeliveryAreaEvent()),
         child: BlocBuilder<BagBloc, BagState>(
           builder: (context, state) {
             var bloc = context.read<BagBloc>();
@@ -305,6 +308,23 @@ class BagView extends StatelessWidget {
                                             width: 1.sw,
                                             child: Column(
                                               children: [
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                if (bloc.bagModel
+                                                        .deliveryCharge <
+                                                    0)
+                                                  Text(
+                                                      "Delivery is not available on your prime address.",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall
+                                                          ?.copyWith(
+                                                              color:
+                                                                  Colors.red)),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
@@ -326,27 +346,30 @@ class BagView extends StatelessWidget {
                                                     )
                                                   ],
                                                 ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      "Delivery Charge",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .labelLarge,
-                                                    ),
-                                                    Text(
-                                                      bloc.bagModel
-                                                          .deliveryCharge
-                                                          .toformat(),
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium,
-                                                    )
-                                                  ],
-                                                ),
+                                                if (bloc.bagModel
+                                                        .deliveryCharge >=
+                                                    0)
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Delivery Charge",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .labelLarge,
+                                                      ),
+                                                      Text(
+                                                        bloc.bagModel
+                                                            .deliveryCharge
+                                                            .toformat(),
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleMedium,
+                                                      )
+                                                    ],
+                                                  ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment

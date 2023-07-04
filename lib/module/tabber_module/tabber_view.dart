@@ -13,7 +13,7 @@ class TabberView extends StatelessWidget {
       create: (context) => TabberBloc(),
       child: BlocBuilder<TabberBloc, TabberState>(
         builder: (context, state) {
-          final bloc = context.read<TabberBloc>();
+          final bloc = context.read<TabberBloc>()..add(SubscribeBrodcast());
           return Scaffold(
               bottomNavigationBar: Container(
                   padding: const EdgeInsets.symmetric(vertical: 3),

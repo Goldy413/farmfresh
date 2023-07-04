@@ -7,3 +7,5 @@ class ChangeTabEvent extends TabberEvent {
   final int index;
   ChangeTabEvent(this.index);
 }
+
+class SubscribeBrodcast extends TabberEvent {}

@@ -1,6 +1,7 @@
 import 'package:farmfresh/routes.dart';
 import 'package:farmfresh/utility/app_storage.dart';
 import 'package:farmfresh/utility/custom_scroll_behaviour.dart';
+import 'package:farmfresh/utility/push_notification_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await AppStorage.objectValue();
+  PushNotificationsManager().init();
   runApp(MyApp());
 }
 

@@ -18,6 +18,7 @@ class ImageConstants {
 
 class CollectionConstant {
   static const String user = "users";
+  static const String adminUser = "admin";
   static const String address = "address";
   static const String category = "category";
   static const String subCategory = "subCategory";
@@ -25,8 +26,12 @@ class CollectionConstant {
   static const String bag = "bag";
   static const String gallery = "gallery";
   static const String categoryPic = "categoryPic";
+  static const String paymentMethod = "paymentMethod";
+  static const String deliveryArea = "deliveryArea";
+  static const String orders = "orders";
 }
 
 class AppConstant {
   static const String apiKey = "AIzaSyC0gtmPF6LQNSQQIcnB9aPV8kVIfLdCr1k";
+  static String updateToken = "update_token";
 }

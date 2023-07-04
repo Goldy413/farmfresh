@@ -57,6 +57,20 @@
 	<string>This app needs access to location when in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open.</string>
-	
+	  <key>LSApplicationQueriesSchemes</key>
+  <array>
+    <string>amazonpay</string>
+    <string>bhimupi</string>
+    <string>gpay</string>
+    <string>mipay</string>
+    <string>mobikwik</string>
+    <string>myairtelupi</string>
+    <string>paytm</string>
+    <string>phonepe</string>
+    <string>upi</string>
+    <string>upibillpay</string>
+    <string>sbiupi</string>
+    <string>whatsapp</string>
+  </array>
 </dict>
 </plist>

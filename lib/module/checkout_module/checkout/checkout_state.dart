@@ -13,3 +13,10 @@ class AddAddressState extends CheckoutState {
 class AddAddressLoadingState extends CheckoutState {}
 
 class ChangeState extends CheckoutState {}
+
+class OrderPlacedSucessfully extends CheckoutState {}
+
+class CheckoutErrorState extends CheckoutState {
+  final String message;
+  CheckoutErrorState(this.message);
+}

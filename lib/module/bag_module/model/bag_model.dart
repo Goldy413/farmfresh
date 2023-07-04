@@ -67,7 +67,7 @@ class CartItems {
     image = json['image'];
     productId = json['productId'];
     name = json['name'];
-    price = json['price']; //double.tryParse(.t?? "0.0") ?? 0.0;
+    price = json['price'];
     size = json['size'];
     color = json['color'];
     qty = json['qty'];
