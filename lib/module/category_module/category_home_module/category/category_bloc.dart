@@ -19,7 +19,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<GridSelectedEvent>((event, emit) =>
         {gridSelected = event.isGridSelected, emit(GridSelectedState())});
 
-    on<GetCategory>((event, emit) => repo.getCategory(
+    on<GetCategory>((event, emit) async => await repo.getCategory(
         categoryCallback: (category) => {
               categoryItem.clear(),
               for (DocumentSnapshot dataRef in category.docs)

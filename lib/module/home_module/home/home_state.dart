@@ -5,4 +5,4 @@ abstract class HomeState {}
 
 class HomeInitial extends HomeState {}
 
-class SelectImageState extends HomeState {}
+class ChangeState extends HomeState {}

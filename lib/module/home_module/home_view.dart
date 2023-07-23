@@ -1,10 +1,10 @@
 import 'package:farmfresh/module/home_module/home/home_bloc.dart';
-import 'package:farmfresh/utility/app_storage.dart';
-import 'package:farmfresh/utility/ui/custom_button.dart';
+import 'package:farmfresh/module/home_module/home_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeView extends StatelessWidget {
   final picker = ImagePicker();
@@ -12,68 +12,91 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: BlocProvider(
-        create: (context) => HomeBloc(),
-        child: BlocBuilder<HomeBloc, HomeState>(
-          builder: (context, state) {
-            var bloc = context.read<HomeBloc>();
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 1.sw,
-                ),
-                Text(
-                  "User Name : ${AppStorage().userDetail!.name}",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                Text(
-                  "Mobile no : ${AppStorage().userDetail!.phoneNumber}",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                Text(
-                  "Email no : ${AppStorage().userDetail!.email}",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                Text(
-                  "Path : ${bloc.image?.path}",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                bloc.image != null
-                    ? Text(
-                        //"${bloc.image?.readAsBytes()}",
-                        "Size : ${bloc.imageSize}",
-                        style: Theme.of(context).textTheme.titleMedium,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Home"),
+      ),
+      body: RepositoryProvider(
+        create: (context) => HomeRepository(),
+        child: BlocProvider(
+          create: (context) => HomeBloc(context.read())..add(GetBannerEvent()),
+          child: BlocBuilder<HomeBloc, HomeState>(
+            builder: (context, state) {
+              var bloc = context.read<HomeBloc>();
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 202.h,
+                        child: BlocConsumer<HomeBloc, HomeState>(
+                          listener: (context, state) {},
+                          builder: (context, state) {
+                            List<Widget> pages = getPage(context, bloc);
+                            return pages.isNotEmpty
+                                ? Column(
+                                    children: [
+                                      Expanded(
+                                        child: PageView(
+                                            allowImplicitScrolling: true,
+                                            controller: bloc.pageController,
+                                            scrollDirection: Axis.horizontal,
+                                            onPageChanged: (index) => {
+                                                  bloc.onPageChange(index),
+                                                },
+                                            children: pages),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      SmoothPageIndicator(
+                                        controller: bloc.pageController,
+                                        count: pages.length,
+                                        effect: const WormEffect(
+                                          dotHeight: 16,
+                                          dotWidth: 16,
+                                          type: WormType.thinUnderground,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
+                                  )
+                                : const SizedBox();
+                          },
+                        ),
                       )
-                    : const SizedBox(),
-                CustomButton(
-                    text: "Select Image",
-                    onPressed: () async => {
-                          await picker
-                              .pickImage(source: ImageSource.gallery)
-                              .then((value) =>
-                                  {bloc.add(SelectImageEvent(value))})
-                        }),
-                CustomButton(
-                    text: "Compress",
-                    onPressed: () => {bloc.add(CompressImageEvent())}),
-                Text(
-                  "Compress Path : ${bloc.compresImage?.path}",
-                  style: Theme.of(context).textTheme.titleMedium,
+                    ],
+                  ),
                 ),
-                bloc.compresImage != null
-                    ? Text(
-                        "Compress Size : ${bloc.compressSize}",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      )
-                    : const SizedBox(),
-              ],
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
+  }
+
+  List<Widget> getPage(BuildContext context, HomeBloc bloc) {
+    final pagerList = <Widget>[];
+    //List<Ban> banner = bloc.banner;
+    for (int i = 0; i < bloc.banner.length; i++) {
+      pagerList.add(GestureDetector(
+        onTap: () => {
+          // Get.to(() => new ProductsScreen(
+          //     categoryId: bannerItems[i].id,
+          //     products: [],
+          //     title: bannerItems[i].name))
+        },
+        child: ClipRRect(
+          child: Image.network(bloc.banner[i].image,
+              width: 1.sw, fit: BoxFit.fill),
+        ),
+      ));
+    }
+    bloc.autoPlayBanner(bloc.banner);
+    return pagerList;
   }
 }

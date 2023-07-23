@@ -51,7 +51,8 @@ class VerificationRepository {
         .doc(uid)
         .get()
         .then((DocumentSnapshot snapshot) {
-      UserModel userModel = UserModel.fromMap(snapshot as Map<String, dynamic>);
+      UserModel userModel =
+          UserModel.fromMap(snapshot.data() as Map<String, dynamic>);
       userCallBack(userModel);
     });
   }

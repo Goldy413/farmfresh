@@ -29,6 +29,7 @@ class CollectionConstant {
   static const String paymentMethod = "paymentMethod";
   static const String deliveryArea = "deliveryArea";
   static const String orders = "orders";
+  static const String banner = "banner";
 }
 
 class AppConstant {
