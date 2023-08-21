@@ -30,6 +30,7 @@ class CollectionConstant {
   static const String deliveryArea = "deliveryArea";
   static const String orders = "orders";
   static const String banner = "banner";
+  static const String review = "review";
 }
 
 class AppConstant {

@@ -2,10 +2,23 @@ import 'dart:io';
 
 import 'package:farmfresh/module/product_module/product_detail_module/model/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 extension BuildContextHelper on BuildContext {
   void hideKeyboard() {
     FocusScope.of(this).requestFocus(FocusNode());
+  }
+}
+
+extension DateTimeHelper on DateTime {
+  /// Return a string representing [date] formatted according to our locale
+  /// and internal format.
+  String toStringFormat(String format) {
+    return DateFormat(format).format(this);
+  }
+
+  bool isSameDate(DateTime other) {
+    return year == other.year && month == other.month && day == other.day;
   }
 }
 

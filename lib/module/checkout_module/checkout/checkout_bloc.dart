@@ -7,11 +7,10 @@ import 'package:farmfresh/module/login_module/model/login_model.dart';
 import 'package:farmfresh/utility/app_storage.dart';
 import 'package:farmfresh/utility/device_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:place_picker/place_picker.dart';
-import 'package:upi_payment_flutter/upi_payment_flutter.dart';
+import 'package:quantupi/quantupi.dart';
 
 part 'checkout_event.dart';
 part 'checkout_state.dart';
@@ -106,15 +105,16 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         var placeorder = PlaceOrder(
             id: "",
             userId: bagModel.userId,
+            fcmToken: AppStorage().token ?? "",
             userName: bagModel.userName,
             items: bagModel.items,
             deliveryCharge: bagModel.deliveryCharge,
             address: selectedAddress!,
             paymentMethod: selectedPaymentMethod!,
-            placeAt: "",
+            placeAt: DateTime.now(),
             createdAt: "",
-            updateAt: "",
-            status: 1,
+            updateAt: DateTime.now(),
+            status: 'Placed',
             itemsTotal: calculateItemTotal(),
             total: calTotal(),
             transactionId: '');
@@ -122,24 +122,33 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         if (selectedPaymentMethod?.type == "upi") {
           var transactionId =
               "TXN_${DateTime.now().millisecondsSinceEpoch.toString()}";
+          Quantupi upi = Quantupi(
+            receiverUpiId: selectedPaymentMethod?.key ?? "",
+            receiverName: selectedPaymentMethod?.marchantName ?? "",
+            transactionRefId: transactionId,
+            transactionNote: 'Farm Fresh Order',
+            amount: placeorder.total,
+          );
+          final response = await upi.startTransaction();
+          if (response == 'user_canceled') {
+            return;
+          }
 
-          try {
-            final upiPaymentHandler = UpiPaymentHandler();
-            bool success = await upiPaymentHandler.initiateTransaction(
-              payeeVpa: selectedPaymentMethod?.key ?? "",
-              payeeName: selectedPaymentMethod?.marchantName ?? "",
-              transactionRefId: transactionId,
-              transactionNote: "Farm Fresh Order.",
-              amount: placeorder.total,
-            );
-            if (success) {
-              placeorder.transactionId = transactionId;
-              //await placeOrder(placeorder, emit);
-            } else {
-              emit(CheckoutErrorState("Your Transaction is canceled."));
+          List<String> value = response.split("&");
+          var actualValue = <String, String>{};
+          List<String> valuePair;
+          for (var element in value) {
+            valuePair = element.split("=");
+            if (valuePair.length > 1) {
+              actualValue[valuePair.first] = valuePair[1];
             }
-          } on PlatformException catch (e) {
-            emit(CheckoutErrorState("Your Transaction is canceled-$e"));
+          }
+          debugPrint(actualValue.toString());
+          if (actualValue["Status"] != "FAILURE") {
+            placeorder.transactionId = actualValue["txnId"] ?? transactionId;
+            await placeOrder(placeorder, emit);
+          } else {
+            emit(CheckoutErrorState("Your Transaction is canceled."));
           }
         } else {
           await placeOrder(placeorder, emit);

@@ -19,22 +19,22 @@ class BannerModel {
 }
 
 class Ban {
-  Ban({
-    required this.image,
-    required this.cateoryId,
-  });
+  Ban({required this.image, required this.cateoryId, required this.isActive});
   late String image;
   late String cateoryId;
+  late bool isActive;
 
   Ban.fromJson(Map<String, dynamic> json) {
     image = json['image'];
     cateoryId = json['cateoryId'];
+    isActive = json['isActive'];
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['image'] = image;
     data['cateoryId'] = cateoryId;
+    data['isActive'] = isActive;
     return data;
   }
 }

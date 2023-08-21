@@ -28,6 +28,7 @@ class ProductItem {
   late String image;
   late String createdAt;
   late Varient varient;
+  late bool showQty;
 
   factory ProductItem.fromRawJson(String str) =>
       ProductItem.fromJson(json.decode(str));
@@ -48,6 +49,7 @@ class ProductItem {
     isActive = json['isActive'];
     image = json['image'];
     createdAt = json['createdAt'] ?? "";
+    showQty = json['showQty'] ?? true;
     varient = json['varient'] != null
         ? Varient.fromJson(json['varient'])
         : Varient(color: [], size: []);
@@ -68,6 +70,7 @@ class ProductItem {
     data['image'] = image;
     data['createdAt'] = createdAt;
     data['varient'] = varient.toJson();
+    data['showQty'] = showQty;
     return data;
   }
 }

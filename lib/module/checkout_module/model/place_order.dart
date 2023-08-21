@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmfresh/module/bag_module/model/bag_model.dart';
 import 'package:farmfresh/module/checkout_module/model/payment_method_model.dart';
 import 'package:farmfresh/module/login_module/model/login_model.dart';
@@ -6,6 +7,7 @@ class PlaceOrder {
   PlaceOrder({
     required this.id,
     required this.userId,
+    required this.fcmToken,
     required this.userName,
     required this.items,
     required this.deliveryCharge,
@@ -21,22 +23,24 @@ class PlaceOrder {
   });
   late String id;
   late String userId;
+  late String fcmToken;
   late String userName;
   late List<CartItems> items;
   late double deliveryCharge;
   late Address address;
   late PaymentMethod paymentMethod;
-  late String placeAt;
+  late DateTime placeAt;
   late String createdAt;
-  late String updateAt;
-  late int status;
+  late DateTime updateAt;
+  late String status;
   late double itemsTotal;
   late double total;
   late String transactionId;
 
   PlaceOrder.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'] ?? "";
     userId = json['userId'];
+    fcmToken = json['fcmToken'];
     userName = json['userName'];
     items = json['items'] == null
         ? []
@@ -44,9 +48,9 @@ class PlaceOrder {
     deliveryCharge = json['deliveryCharge'];
     address = Address.fromJson(json['address']);
     paymentMethod = PaymentMethod.fromJson(json['paymentMethod']);
-    placeAt = json['placeAt'];
+    placeAt = (json['placeAt'] as Timestamp).toDate();
     createdAt = json['createdAt'];
-    updateAt = json['updateAt'];
+    updateAt = (json['updateAt'] as Timestamp).toDate();
     status = json['status'];
     itemsTotal = json['itemsTotal'];
     total = json['total'];
@@ -57,6 +61,7 @@ class PlaceOrder {
     final data = <String, dynamic>{};
     data['id'] = id;
     data['userId'] = userId;
+    data['fcmToken'] = fcmToken;
     data['userName'] = userName;
     data['items'] = items.map((e) => e.toJson()).toList();
 

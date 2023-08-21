@@ -23,6 +23,31 @@ class ProductDetailView extends StatelessWidget {
         create: (context) => ProductDetailBloc(context.read(), productItem)
           ..add(GetProductDetailEvent()),
         child: Scaffold(
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton:
+              BlocConsumer<ProductDetailBloc, ProductDetailState>(
+            listener: (context, state) {
+              if (state is ProductAddState) {
+                callFlash(context, "${state.name} Added",
+                    "${state.qty} ${state.name} is added into your bag.");
+              }
+            },
+            builder: (context, state) {
+              var bloc = context.read<ProductDetailBloc>();
+              return FloatingActionButton.extended(
+                onPressed: () {
+                  bloc.add(AddtoBagEvent());
+                },
+                isExtended: true,
+                backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                foregroundColor: Colors.black,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                icon: const Icon(Icons.badge_outlined, size: 20),
+                label: Text("Add to Bag".toUpperCase()),
+              );
+            },
+          ),
           body: CustomScrollView(slivers: [
             BlocBuilder<ProductDetailBloc, ProductDetailState>(
               builder: (context, state) {
@@ -258,152 +283,166 @@ class ProductDetailView extends StatelessWidget {
                             const SizedBox(
                               height: 15,
                             ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    'Select the quantity :',
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: 32.0,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(3),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        IconButton(
-                                          onPressed: () =>
-                                              {bloc.add(SubtractQtyEvent())},
-                                          icon: const Center(
-                                              child: Icon(
-                                            Icons.arrow_back_ios,
-                                            size: 15,
-                                          )),
+                            bloc.productItem.showQty
+                                ? Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          'Select the quantity :',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
                                         ),
-                                        Expanded(
-                                            child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 4.0),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          height: 32.0,
+                                          alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                            border: Border.all(
-                                                width: 1.0,
-                                                color: const Color.fromARGB(
-                                                    255, 210, 208, 208)),
                                             borderRadius:
                                                 BorderRadius.circular(3),
                                           ),
-                                          alignment: Alignment.center,
-                                          child: TextField(
-                                            readOnly: true,
-                                            enabled: false,
-                                            maxLines: 1,
-                                            maxLength: 2,
-                                            style: const TextStyle(
-                                                color: Colors.black),
-                                            decoration: const InputDecoration(
-                                              border: InputBorder.none,
-                                              counterText: '',
-                                            ),
-                                            keyboardType: const TextInputType
-                                                .numberWithOptions(
-                                              signed: false,
-                                              decimal: false,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                            controller: bloc.textController,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              IconButton(
+                                                onPressed: () => {
+                                                  bloc.add(SubtractQtyEvent())
+                                                },
+                                                icon: const Center(
+                                                    child: Icon(
+                                                  Icons.arrow_back_ios,
+                                                  size: 15,
+                                                )),
+                                              ),
+                                              Expanded(
+                                                  child: Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 4.0),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 1.0,
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              210,
+                                                              208,
+                                                              208)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(3),
+                                                ),
+                                                alignment: Alignment.center,
+                                                child: TextField(
+                                                  readOnly: true,
+                                                  enabled: false,
+                                                  maxLines: 1,
+                                                  maxLength: 2,
+                                                  style: const TextStyle(
+                                                      color: Colors.black),
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    border: InputBorder.none,
+                                                    counterText: '',
+                                                  ),
+                                                  keyboardType:
+                                                      const TextInputType
+                                                          .numberWithOptions(
+                                                    signed: false,
+                                                    decimal: false,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                  controller:
+                                                      bloc.textController,
+                                                ),
+                                              )),
+                                              IconButton(
+                                                //padding: _iconPadding,
+                                                onPressed: () =>
+                                                    {bloc.add(AddQtyEvent())},
+                                                icon: const Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  size: 15,
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        )),
-                                        IconButton(
-                                          //padding: _iconPadding,
-                                          onPressed: () =>
-                                              {bloc.add(AddQtyEvent())},
-                                          icon: const Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 15,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                : const SizedBox(),
                             const SizedBox(
                               height: 15,
                             ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: InkWell(
-                                    //onTap: () => addToCart(buyNow: false, inStock: inStock),
-                                    child: Container(
-                                      height: 44,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(3),
-                                        color: Theme.of(context).splashColor,
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'Buy Now'.toUpperCase(),
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: BlocListener<ProductDetailBloc,
-                                      ProductDetailState>(
-                                    listener: (context, state) {
-                                      if (state is ProductAddState) {
-                                        callFlash(
-                                            context,
-                                            "${state.name} Added",
-                                            "${state.qty} ${state.name} is added into your bag.");
-                                      }
-                                    },
-                                    child: InkWell(
-                                      onTap: () => {bloc.add(AddtoBagEvent())},
-                                      child: Container(
-                                        height: 44,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                          // Colors.grey.withOpacity(0.2),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Add To Bag'.toUpperCase(),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 15),
+                            // Row(
+                            //   children: [
+                            //     Expanded(
+                            //       child: InkWell(
+                            //         //onTap: () => addToCart(buyNow: false, inStock: inStock),
+                            //         child: Container(
+                            //           height: 44,
+                            //           decoration: BoxDecoration(
+                            //             borderRadius: BorderRadius.circular(3),
+                            //             color: Theme.of(context).splashColor,
+                            //           ),
+                            //           child: Center(
+                            //             child: Text(
+                            //               'Buy Now'.toUpperCase(),
+                            //               style: const TextStyle(
+                            //                 color: Colors.black,
+                            //                 fontWeight: FontWeight.bold,
+                            //                 fontSize: 12,
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     const SizedBox(
+                            //       width: 10,
+                            //     ),
+                            //     Expanded(
+                            //       child: BlocListener<ProductDetailBloc,
+                            //           ProductDetailState>(
+                            //         listener: (context, state) {
+                            //           if (state is ProductAddState) {
+                            //             callFlash(
+                            //                 context,
+                            //                 "${state.name} Added",
+                            //                 "${state.qty} ${state.name} is added into your bag.");
+                            //           }
+                            //         },
+                            //         child: InkWell(
+                            //           onTap: () => {bloc.add(AddtoBagEvent())},
+                            //           child: Container(
+                            //             height: 44,
+                            //             decoration: BoxDecoration(
+                            //               borderRadius:
+                            //                   BorderRadius.circular(3),
+                            //               color: Theme.of(context)
+                            //                   .colorScheme
+                            //                   .secondary,
+                            //               // Colors.grey.withOpacity(0.2),
+                            //             ),
+                            //             child: Center(
+                            //               child: Text(
+                            //                 'Add To Bag'.toUpperCase(),
+                            //                 style: const TextStyle(
+                            //                   color: Colors.white,
+                            //                   fontWeight: FontWeight.bold,
+                            //                   fontSize: 12,
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // const SizedBox(height: 15),
                             Card(
                               shape: Border.all(color: Colors.transparent),
                               elevation: 1,

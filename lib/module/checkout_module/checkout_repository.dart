@@ -81,16 +81,17 @@ class CheckoutRepository {
         .add({});
     placeorder.id = response.id;
     placeorder.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
-    placeorder.placeAt = DateTime.now().millisecondsSinceEpoch.toString();
+    placeorder.placeAt = DateTime.now();
+    //.millisecondsSinceEpoch.toString();
+    // DateTime()
     await FirebaseFirestore.instance
         .collection(CollectionConstant.orders)
         .doc(response.id)
         .set(placeorder.toJson());
+
     for (AdminModel element in admin) {
-      sendPushMessage(
-          "You receive a new ${placeorder.total.toformat()} order\n Order ID:order\\",
-          "New Order",
-          element.fcmToken);
+      sendPushMessage("You receive a new ${placeorder.total.toformat()} order.",
+          "New Order", element.fcmToken);
     }
 
     callback();

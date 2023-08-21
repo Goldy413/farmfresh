@@ -457,4 +457,44 @@ class CheckoutView extends StatelessWidget {
       ),
     );
   }
+
+  // void openBottomSheet(List<ApplicationMeta> appsFuture, BuildContext context) {
+  //   showModalBottomSheet<void>(
+  //       context: context,
+  //       backgroundColor: Colors.white,
+  //       builder: (BuildContext context) {
+  //         return Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: appsFuture.isNotEmpty
+  //               ? GridView.builder(
+  //                   shrinkWrap: true,
+  //                   gridDelegate:
+  //                       const SliverGridDelegateWithFixedCrossAxisCount(
+  //                     crossAxisCount: 3,
+  //                     crossAxisSpacing: 5.0,
+  //                     mainAxisSpacing: 5.0,
+  //                   ),
+  //                   itemCount: appsFuture.length,
+  //                   itemBuilder: (context, index) => InkWell(
+  //                         onTap: () => {
+  //                           // bloc.file = null,
+  //                           // bloc.add(AddSelectGalleyImageEvent(
+  //                           //     bloc.imageFiles[index].fileUrl))
+  //                         },
+  //                         child: Column(
+  //                           children: [
+  //                             appsFuture[index].iconImage(48),
+  //                             Text(
+  //                               appsFuture[index].packageName,
+  //                               textAlign: TextAlign.center,
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ))
+  //               : const Center(
+  //                   child: Text("Don't have an image in gallery"),
+  //                 ),
+  //         );
+  //       });
+  // }
 }
