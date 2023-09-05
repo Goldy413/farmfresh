@@ -1,12 +1,15 @@
 import 'package:farmfresh/module/product_module/product_detail_module/model/product_model.dart';
 import 'package:farmfresh/module/product_module/product_detail_module/productDetail/product_detail_bloc.dart';
 import 'package:farmfresh/module/product_module/product_detail_module/product_detail_repository.dart';
+import 'package:farmfresh/routes.dart';
+import 'package:farmfresh/utility/app_storage.dart';
 import 'package:farmfresh/utility/extensions.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductDetailView extends StatelessWidget {
   final ProductItem productItem;
@@ -21,6 +24,7 @@ class ProductDetailView extends StatelessWidget {
       create: (context) => ProductDetailRepository(),
       child: BlocProvider(
         create: (context) => ProductDetailBloc(context.read(), productItem)
+          ..add(GetSuggestedProductEvent())
           ..add(GetProductDetailEvent()),
         child: Scaffold(
           floatingActionButtonLocation:
@@ -36,16 +40,34 @@ class ProductDetailView extends StatelessWidget {
             builder: (context, state) {
               var bloc = context.read<ProductDetailBloc>();
               return FloatingActionButton.extended(
-                onPressed: () {
-                  bloc.add(AddtoBagEvent());
-                },
-                isExtended: true,
-                backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                foregroundColor: Colors.black,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                icon: const Icon(Icons.badge_outlined, size: 20),
-                label: Text("Add to Bag".toUpperCase()),
-              );
+                  onPressed: () {
+                    bloc.add(AddtoBagEvent());
+                  },
+                  isExtended: true,
+                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                  foregroundColor: Colors.black,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  icon: const Icon(Icons.shopping_bag_outlined, size: 20),
+                  label: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("Add to Bag".toUpperCase()),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const Text("Item Price"),
+                          Text(bloc.price.toformat())
+                        ],
+                      )
+                    ],
+                  )
+                  //,
+                  );
             },
           ),
           body: CustomScrollView(slivers: [
@@ -54,7 +76,40 @@ class ProductDetailView extends StatelessWidget {
                 var bloc = context.read<ProductDetailBloc>();
 
                 return SliverAppBar(
-                  toolbarHeight: 80,
+                  //toolbarHeight: 80,
+                  leading: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: BackButton(
+                        color: Colors.black,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                            shape: const CircleBorder())),
+                  ),
+                  actions: [
+                    MaterialButton(
+                      onPressed: () => {context.push(AppPaths.bag)},
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      shape: const CircleBorder(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Badge(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          label: (AppStorage().userBag?.items.length ?? 0) > 0
+                              ? Text(
+                                  '${AppStorage().userBag?.items.length}',
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              : null,
+                          child: const Icon(
+                            Icons.shopping_bag_outlined,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(22),
                     child: Container(
@@ -77,7 +132,7 @@ class ProductDetailView extends StatelessWidget {
                   elevation: 0,
                   pinned: true,
                   backgroundColor: Colors.white,
-                  expandedHeight: 300.0,
+                  expandedHeight: 400.0,
                   stretch: true,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Image.network(
@@ -110,7 +165,7 @@ class ProductDetailView extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Size",
+                                        "Select Size : ",
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleLarge
@@ -184,7 +239,7 @@ class ProductDetailView extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Colors",
+                                        "Select Colors :",
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleLarge
@@ -447,7 +502,7 @@ class ProductDetailView extends StatelessWidget {
                               shape: Border.all(color: Colors.transparent),
                               elevation: 1,
                               child: ExpansionTile(
-                                  initiallyExpanded: false,
+                                  initiallyExpanded: true,
                                   backgroundColor: Colors.white,
                                   shape: Border.all(color: Colors.transparent),
                                   tilePadding: const EdgeInsets.symmetric(
@@ -472,6 +527,71 @@ class ProductDetailView extends StatelessWidget {
                                     )
                                   ]),
                             ),
+
+                            const SizedBox(
+                              height: 10,
+                            ),
+
+                            bloc.suggestedProductItem.isNotEmpty
+                                ? SizedBox(
+                                    height: 0.3.sh,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            width: 1.sw,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 5),
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary
+                                                      .withOpacity(0.7),
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary
+                                                      .withOpacity(0.3),
+                                                  const Color(0xFFFEC8D1),
+                                                  const Color(0xFFFEC8D1),
+                                                  Colors.white,
+                                                ],
+                                              ),
+                                            ),
+                                            child: Text(
+                                              "May You Like : ",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineMedium
+                                                  ?.copyWith(
+                                                      fontSize: 20,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                            )),
+                                        Expanded(
+                                          child: ListView.separated(
+                                              padding: const EdgeInsets.all(8),
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: bloc
+                                                  .suggestedProductItem.length,
+                                              separatorBuilder:
+                                                  (context, index) =>
+                                                      const SizedBox(width: 15),
+                                              itemBuilder: (context, index) {
+                                                return productItemHorizontal(
+                                                    bloc.suggestedProductItem[
+                                                        index],
+                                                    context);
+                                              }),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            const SizedBox(
+                              height: 150,
+                            ),
                           ]));
                 },
               ),
@@ -482,12 +602,74 @@ class ProductDetailView extends StatelessWidget {
     );
   }
 
+  Widget productItemHorizontal(
+      ProductItem mostOrderproductItem, BuildContext context) {
+    return InkWell(
+        onTap: () =>
+            {context.push(AppPaths.product, extra: mostOrderproductItem)},
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          width: 0.5.sw,
+          decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(1, 1),
+                  blurRadius: 2,
+                  color: Colors.grey,
+                )
+              ]),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Image.network(
+                  mostOrderproductItem.image,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(mostOrderproductItem.name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w500)),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Flexible(child: mostOrderproductItem.getPrice())
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  mostOrderproductItem.desc,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: const TextStyle(
+                      color: Colors.black87, fontWeight: FontWeight.normal),
+                ),
+              )
+            ],
+          ),
+        ));
+  }
+
   void callFlash(BuildContext context, String title, String message) {
     context.showFlash(
         duration: const Duration(seconds: 3),
         barrierDismissible: true,
         builder: (context, controller) => FlashBar(
-              backgroundColor: Colors.black87,
+              backgroundColor: Colors.amber,
               controller: controller,
               behavior: FlashBehavior.floating,
               shape: const RoundedRectangleBorder(
@@ -498,15 +680,15 @@ class ProductDetailView extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               icon: const Icon(
                 Icons.check_circle_outline,
-                color: Colors.amber,
+                color: Colors.green,
               ),
               title: Text(
                 title.toUpperCase(),
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.black87),
               ),
               content: Text(
                 message,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.black87),
               ),
             ));
   }

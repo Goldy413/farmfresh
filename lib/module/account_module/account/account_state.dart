@@ -4,3 +4,5 @@ part of 'account_bloc.dart';
 abstract class AccountState {}
 
 class AccountInitial extends AccountState {}
+
+class SignOutSucessfull extends AccountState {}

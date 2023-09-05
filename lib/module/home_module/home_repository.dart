@@ -41,6 +41,23 @@ class HomeRepository {
     });
   }
 
+  Future<void> getMostOrder(
+      {required Function(List<ProductItem> productList) callback}) async {
+    FirebaseFirestore.instance
+        .collection(CollectionConstant.product)
+        .where('isActive', isEqualTo: true)
+        .where('mostOrder', isEqualTo: true)
+        .snapshots()
+        .listen((product) {
+      List<ProductItem> productItem = <ProductItem>[];
+      for (DocumentSnapshot dataRef in product.docs) {
+        productItem
+            .add(ProductItem.fromJson(dataRef.data() as Map<String, dynamic>));
+      }
+      callback(productItem);
+    });
+  }
+
   Future<void> getFirstList(
       {required Function(List<ProductItem> reviewList) callback}) async {
     FirebaseFirestore.instance

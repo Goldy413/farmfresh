@@ -1,13 +1,16 @@
 import 'package:farmfresh/module/home_module/home/home_bloc.dart';
 import 'package:farmfresh/module/home_module/home_repository.dart';
+import 'package:farmfresh/module/product_module/product_detail_module/model/product_model.dart';
 import 'package:farmfresh/routes.dart';
 import 'package:farmfresh/utility/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 class HomeView extends StatelessWidget {
@@ -24,6 +27,7 @@ class HomeView extends StatelessWidget {
         create: (context) => HomeRepository(),
         child: BlocProvider(
           create: (context) => HomeBloc(context.read())
+            ..add(GetMostOrderProductEvent())
             ..add(GetProductEvent())
             ..add(GetReviewEvent())
             ..add(GetBannerEvent()),
@@ -32,7 +36,7 @@ class HomeView extends StatelessWidget {
               var bloc = context.read<HomeBloc>();
               List<Widget> pages = getPage(context, bloc);
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(0.0),
                 child: SingleChildScrollView(
                   controller: bloc.controller,
                   child: Column(
@@ -71,6 +75,60 @@ class HomeView extends StatelessWidget {
                                 ],
                               ))
                           : const SizedBox(),
+                      bloc.mostOrderproductItem.isNotEmpty
+                          ? SizedBox(
+                              height: 0.3.sh,
+                              child: Column(
+                                children: [
+                                  Container(
+                                      width: 1.sw,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 5),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
+                                                .withOpacity(0.7),
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
+                                                .withOpacity(0.3),
+                                            const Color(0xFFFEC8D1),
+                                            const Color(0xFFFEC8D1),
+                                            Colors.white,
+                                          ],
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "Most Order Items",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium
+                                            ?.copyWith(
+                                                fontSize: 20,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600),
+                                      )),
+                                  Expanded(
+                                    child: ListView.separated(
+                                        padding: const EdgeInsets.all(8),
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount:
+                                            bloc.mostOrderproductItem.length,
+                                        separatorBuilder: (context, index) =>
+                                            const SizedBox(width: 15),
+                                        itemBuilder: (context, index) {
+                                          return productItem(
+                                              bloc.mostOrderproductItem[index],
+                                              context);
+                                        }),
+                                  )
+                                ],
+                              ),
+                            )
+                          : const SizedBox(),
                       bloc.reviewList.isNotEmpty
                           ? SizedBox(
                               height: 400,
@@ -80,15 +138,36 @@ class HomeView extends StatelessWidget {
                                   const SizedBox(
                                     height: 8,
                                   ),
-                                  Text(
-                                    "What's attracts the reader towards a review."
-                                        .toUpperCase(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.copyWith(
-                                            fontSize: 20, color: Colors.black),
-                                  ),
+                                  Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 5),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
+                                                .withOpacity(0.7),
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
+                                                .withOpacity(0.3),
+                                            const Color(0xFFFEC8D1),
+                                            const Color(0xFFFEC8D1),
+                                            Colors.white,
+                                          ],
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "What's attracts the reader towards a review."
+                                            .toUpperCase(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                                fontSize: 20,
+                                                color: Colors.black),
+                                      )),
                                   const SizedBox(
                                     height: 8,
                                   ),
@@ -153,10 +232,37 @@ class HomeView extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text(
-                        "Products",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
+                      Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 5),
+                          width: 1.sw,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary
+                                    .withOpacity(0.7),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .onPrimary
+                                    .withOpacity(0.3),
+                                const Color(0xFFFEC8D1),
+                                const Color(0xFFFEC8D1),
+                                Colors.white,
+                              ],
+                            ),
+                          ),
+                          child: Text(
+                            "Products",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.copyWith(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                          )),
                       const SizedBox(
                         height: 10,
                       ),
@@ -165,10 +271,10 @@ class HomeView extends StatelessWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 5.0,
-                            mainAxisSpacing: 7.0,
-                          ),
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 5.0,
+                                  mainAxisSpacing: 7.0,
+                                  mainAxisExtent: 230),
                           itemCount: bloc.productItem.length,
                           itemBuilder: (context, index) => InkWell(
                               onTap: () => {
@@ -206,17 +312,22 @@ class HomeView extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          Text(bloc.productItem[index].name,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w500)),
+                                          Flexible(
+                                            child: Text(
+                                                bloc.productItem[index].name,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                          ),
                                           const SizedBox(
                                             width: 5,
                                           ),
-                                          bloc.productItem[index].getPrice()
+                                          Flexible(
+                                              child: bloc.productItem[index]
+                                                  .getPrice())
                                         ],
                                       ),
                                     ),
@@ -235,7 +346,44 @@ class HomeView extends StatelessWidget {
                                 ),
                               ))),
                       const SizedBox(
+                        height: 20,
+                      ),
+                      const Divider(),
+                      Container(
+                        width: 1.sw,
                         height: 50,
+                        color: Colors.white,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                  onPressed: () => callLink(
+                                      "https://www.facebook.com/people/FarmFresh/100093691961032/"),
+                                  icon: const Icon(
+                                    FontAwesomeIcons.facebook,
+                                    size: 26,
+                                  )),
+                              IconButton(
+                                  onPressed: () => callLink(
+                                      "https://in.pinterest.com/OfficialCoralHaze/_created/"),
+                                  icon: const Icon(
+                                    FontAwesomeIcons.pinterest,
+                                    size: 26,
+                                  )),
+                              IconButton(
+                                  onPressed: () => callLink(
+                                      "https://instagram.com/_farmfreshindia?utm_source=qr&igshid=MzNlNGNkZWQ4Mg%3D%3D"),
+                                  icon: const Icon(
+                                    FontAwesomeIcons.instagram,
+                                    size: 26,
+                                  )),
+                            ],
+                          ),
+                        ), //const Color(0xFFE6D3D8),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                     ],
                   ),
@@ -248,16 +396,19 @@ class HomeView extends StatelessWidget {
     );
   }
 
+  callLink(String link) async {
+    if (await canLaunchUrl(Uri.parse(link))) {
+      await launchUrl(Uri.parse(link));
+    }
+  }
+
   List<Widget> getPage(BuildContext context, HomeBloc bloc) {
     final pagerList = <Widget>[];
     for (int i = 0; i < bloc.banner.length; i++) {
       pagerList.add(Card(
         child: GestureDetector(
           onTap: () => {
-            // Get.to(() => new ProductsScreen(
-            //     categoryId: bannerItems[i].id,
-            //     products: [],
-            //     title: bannerItems[i].name))
+            context.push(AppPaths.categoryDetail, extra: bloc.banner[i].cateory)
           },
           child: ClipRRect(
             child: Image.network(bloc.banner[i].image,
@@ -268,5 +419,66 @@ class HomeView extends StatelessWidget {
     }
     bloc.autoPlayBanner(bloc.banner);
     return pagerList;
+  }
+
+  Widget productItem(ProductItem mostOrderproductItem, BuildContext context) {
+    return InkWell(
+        onTap: () =>
+            {context.push(AppPaths.product, extra: mostOrderproductItem)},
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          width: 0.5.sw,
+          decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(1, 1),
+                  blurRadius: 2,
+                  color: Colors.grey,
+                )
+              ]),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Image.network(
+                  mostOrderproductItem.image,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(mostOrderproductItem.name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(fontWeight: FontWeight.w500)),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Flexible(child: mostOrderproductItem.getPrice())
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  mostOrderproductItem.desc,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: const TextStyle(
+                      color: Colors.black87, fontWeight: FontWeight.normal),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }

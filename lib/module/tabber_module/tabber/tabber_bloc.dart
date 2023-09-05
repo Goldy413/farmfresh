@@ -37,7 +37,7 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
     BroadcastReceiver().unsubscribe(AppConstant.updateToken);
   }
 
-  registerBroadcast() async {
+  Future<void> registerBroadcast() async {
     String? token = AppStorage().token;
     if (token != null) {
       await FirebaseFirestore.instance
@@ -48,7 +48,6 @@ class TabberBloc extends Bloc<TabberEvent, TabberState> {
 
     BroadcastReceiver().subscribe<String>(AppConstant.updateToken,
         (String message) async {
-      debugPrint(message);
       await FirebaseFirestore.instance
           .collection(CollectionConstant.user)
           .doc(AppStorage().userDetail?.uid)

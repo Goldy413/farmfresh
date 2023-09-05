@@ -19,6 +19,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   String size = "";
   double price = 0.0;
   late BagModel bagModel;
+  List<ProductItem> suggestedProductItem = [];
 
   ProductDetailBloc(this.repo, this.productItem)
       : super(ProductDetailInitial()) {
@@ -48,22 +49,28 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
 
     on<SelectSizeEvent>((event, emit) => {
           size = event.productSize.name,
-          price = max(price, event.productSize.price),
+          price =
+              event.productSize.price, // max(price, event.productSize.price),
           emit(ChangeState())
         });
     on<SelectColorEvent>((event, emit) => {
           color = event.productColor.name,
-          price = max(price, event.productColor.price),
+          price = event.productColor.price,
           emit(ChangeState())
         });
 
     on<StateChangeEvent>((event, emit) => emit(StateChangeState(productItem)));
-    on<GetProductDetailEvent>((event, emit) async => repo.getProductDetail(
-        productItem.id, (product) => productItem = product));
+    on<GetProductDetailEvent>((event, emit) async => await repo
+        .getProductDetail(productItem.id, (product) => productItem = product));
 
     on<GetBagEvent>((event, emit) async {
       await repo.getBag();
     });
+    on<GetSuggestedProductEvent>(
+        (event, emit) async => await repo.getSuggestedProduct(
+              callback: (List<ProductItem> productItem) =>
+                  {suggestedProductItem = productItem, add(StateChangeEvent())},
+            ));
 
     on<AddtoBagEvent>((event, emit) async {
       bagModel.items.add(CartItems(

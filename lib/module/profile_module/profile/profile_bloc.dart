@@ -19,6 +19,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileEvent>((event, emit) {});
     on<SelectImageEvent>(
         (event, emit) => {image = event.file, emit(SelectImageState())});
+    on<MoveToHomeEvent>((event, emit) => emit(MovetoHomeState()));
     on<AddProfileEvent>((event, emit) async {
       if (image == null) {
         emit(ProfileErrorState("Please upload your profile photo"));
@@ -52,7 +53,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               event.phone,
               File(image!.path), onComplete: (UserModel userModel) {
             AppStorage().userDetail = userModel;
-            emit(MovetoHomeState());
+            add(MoveToHomeEvent());
           });
         } catch (err) {
           emit(ProfileErrorState(err.toString()));

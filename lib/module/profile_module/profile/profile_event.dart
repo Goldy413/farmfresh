@@ -16,3 +16,5 @@ class AddProfileEvent extends ProfileEvent {
   final String phone;
   AddProfileEvent(this.uid, this.name, this.email, this.bio, this.phone);
 }
+
+class MoveToHomeEvent extends ProfileEvent {}

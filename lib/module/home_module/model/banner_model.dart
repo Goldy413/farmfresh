@@ -1,3 +1,5 @@
+import 'package:farmfresh/module/category_module/category_home_module/model/category.dart';
+
 class BannerModel {
   BannerModel({required this.banner, required this.id});
   late List<Ban> banner;
@@ -19,21 +21,22 @@ class BannerModel {
 }
 
 class Ban {
-  Ban({required this.image, required this.cateoryId, required this.isActive});
+  Ban({required this.image, required this.cateory, required this.isActive});
   late String image;
-  late String cateoryId;
+  late CategoryItem? cateory;
   late bool isActive;
 
   Ban.fromJson(Map<String, dynamic> json) {
     image = json['image'];
-    cateoryId = json['cateoryId'];
+    cateory =
+        json['cateory'] != null ? CategoryItem.fromJson(json['cateory']) : null;
     isActive = json['isActive'];
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['image'] = image;
-    data['cateoryId'] = cateoryId;
+    data['cateory'] = cateory?.toJson();
     data['isActive'] = isActive;
     return data;
   }

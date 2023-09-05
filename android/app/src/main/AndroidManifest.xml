@@ -40,4 +40,11 @@
            android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyC0gtmPF6LQNSQQIcnB9aPV8kVIfLdCr1k" />
     </application>
+    <queries>
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="https" />
+    </intent>
+</queries>
 </manifest>

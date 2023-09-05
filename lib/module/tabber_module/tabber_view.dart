@@ -1,4 +1,5 @@
 import 'package:farmfresh/module/tabber_module/tabber/tabber_bloc.dart';
+import 'package:farmfresh/utility/app_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,21 +44,67 @@ class TabberView extends StatelessWidget {
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          SvgPicture.asset(
-                                              bloc.tabs[index].icon,
-                                              colorFilter: ColorFilter.mode(
-                                                  bloc.selectedIndex == index
-                                                      ? const Color(0XFF07602E)
-                                                      : const Color(0XFF85BD9F),
-                                                  BlendMode.srcIn),
-                                              fit: BoxFit.fitHeight,
-                                              height:
-                                                  bloc.selectedIndex == index
+                                          bloc.tabs[index].name == "Bag"
+                                              ? Badge(
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                  label: (AppStorage()
+                                                                  .userBag
+                                                                  ?.items
+                                                                  .length ??
+                                                              0) >
+                                                          0
+                                                      ? Text(
+                                                          '${AppStorage().userBag?.items.length}',
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                        )
+                                                      : null,
+                                                  child: SvgPicture.asset(
+                                                      bloc.tabs[index].icon,
+                                                      colorFilter: ColorFilter.mode(
+                                                          bloc.selectedIndex ==
+                                                                  index
+                                                              ? const Color(
+                                                                  0XFF07602E)
+                                                              : const Color(
+                                                                  0XFF85BD9F),
+                                                          BlendMode.srcIn),
+                                                      fit: BoxFit.fitHeight,
+                                                      height:
+                                                          bloc.selectedIndex ==
+                                                                  index
+                                                              ? 24.w
+                                                              : 20.w,
+                                                      width:
+                                                          bloc.selectedIndex ==
+                                                                  index
+                                                              ? 24.w
+                                                              : 20.w),
+                                                )
+                                              : SvgPicture.asset(
+                                                  bloc.tabs[index].icon,
+                                                  colorFilter: ColorFilter.mode(
+                                                      bloc.selectedIndex ==
+                                                              index
+                                                          ? const Color(
+                                                              0XFF07602E)
+                                                          : const Color(
+                                                              0XFF85BD9F),
+                                                      BlendMode.srcIn),
+                                                  fit: BoxFit.fitHeight,
+                                                  height: bloc.selectedIndex ==
+                                                          index
                                                       ? 24.w
                                                       : 20.w,
-                                              width: bloc.selectedIndex == index
-                                                  ? 24.w
-                                                  : 20.w),
+                                                  width: bloc.selectedIndex ==
+                                                          index
+                                                      ? 24.w
+                                                      : 20.w),
                                           if (bloc.selectedIndex == index)
                                             Text(
                                               bloc.tabs[index].name,

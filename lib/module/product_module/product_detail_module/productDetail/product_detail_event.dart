@@ -24,3 +24,5 @@ class SelectColorEvent extends ProductDetailEvent {
 class GetBagEvent extends ProductDetailEvent {}
 
 class AddtoBagEvent extends ProductDetailEvent {}
+
+class GetSuggestedProductEvent extends ProductDetailEvent {}

@@ -101,10 +101,10 @@ class CategoryView extends StatelessWidget {
                               shrinkWrap: true,
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 5.0,
-                                mainAxisSpacing: 5.0,
-                              ),
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 5.0,
+                                      mainAxisSpacing: 5.0,
+                                      mainAxisExtent: 230),
                               itemCount: bloc.categoryItem.length,
                               itemBuilder: (context, index) => InkWell(
                                   onTap: () => context.push(

@@ -318,7 +318,8 @@ class CategoryDetailView extends StatelessWidget {
                                                                   .independentProductItem[
                                                                       index]
                                                                   .image,
-                                                              fit: BoxFit.fill,
+                                                              fit: BoxFit
+                                                                  .contain,
                                                             ),
                                                           ),
                                                           Padding(
@@ -335,24 +336,27 @@ class CategoryDetailView extends StatelessWidget {
                                                                   CrossAxisAlignment
                                                                       .center,
                                                               children: [
-                                                                Text(
-                                                                    bloc
-                                                                        .independentProductItem[
-                                                                            index]
-                                                                        .name,
-                                                                    style: Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .titleMedium
-                                                                        ?.copyWith(
-                                                                            fontWeight:
-                                                                                FontWeight.w500)),
+                                                                Flexible(
+                                                                  child: Text(
+                                                                      bloc
+                                                                          .independentProductItem[
+                                                                              index]
+                                                                          .name,
+                                                                      style: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .titleMedium
+                                                                          ?.copyWith(
+                                                                              fontWeight: FontWeight.w500)),
+                                                                ),
                                                                 const SizedBox(
                                                                   width: 5,
                                                                 ),
-                                                                bloc.independentProductItem[
-                                                                        index]
-                                                                    .getPrice()
+                                                                Flexible(
+                                                                    child: bloc
+                                                                        .independentProductItem[
+                                                                            index]
+                                                                        .getPrice())
                                                               ],
                                                             ),
                                                           ),

@@ -1,5 +1,5 @@
+import 'package:farmfresh/module/checkout_module/model/place_order.dart';
 import 'package:farmfresh/module/order_module/order_detail_module/orderDetail/order_detail_bloc.dart';
-import 'package:farmfresh/module/order_module/order_list_module/model/place_order.dart';
 import 'package:farmfresh/utility/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -310,37 +310,19 @@ class OrderDetailView extends StatelessWidget {
                       height: 10,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Change Order Status : ",
+                          "Order Status : ",
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        DropdownButton<String>(
-                          //isExpanded: true,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          value: bloc.selectedStatus,
-                          items: bloc.statusValue
-                              .map((String value) => DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                    ),
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            bloc.add(StatusChangedEvent(value ?? "Placed"));
-                          },
-                          underline: const SizedBox(),
-                          hint: Expanded(
-                            child: Text(
-                              "Select Type Status",
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          ),
-                        )
+                        Text(
+                          bloc.order.status.toUpperCase(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: getColor(bloc.order.status)),
+                        ),
                       ],
                     )
                   ],
@@ -351,5 +333,29 @@ class OrderDetailView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color getColor(String status) {
+    var color = Colors.black;
+    switch (status) {
+      case "Cancel":
+        color = Colors.red;
+        break;
+      case "Placed":
+        color = Colors.green;
+        break;
+
+      case "Processing":
+        color = Colors.blue;
+        break;
+      case "Out for Delivery":
+        color = Colors.amber;
+        break;
+      case "Delivered":
+        color = Colors.grey;
+        break;
+    }
+
+    return color;
   }
 }

@@ -12,3 +12,5 @@ class GetReviewEvent extends HomeEvent {}
 class GetProductEvent extends HomeEvent {}
 
 class GetNextProductEvent extends HomeEvent {}
+
+class GetMostOrderProductEvent extends HomeEvent {}

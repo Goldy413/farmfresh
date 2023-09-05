@@ -15,6 +15,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeRepository repo;
   List<Ban> banner = [];
   List<ProductItem> productItem = [];
+  List<ProductItem> mostOrderproductItem = [];
   List<ReviewModel> reviewList = [];
   var pageController = PageController();
   int current = 0;
@@ -22,6 +23,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc(this.repo) : super(HomeInitial()) {
     controller.addListener(_scrollListener);
     on<HomeEvent>((event, emit) {});
+    on<GetMostOrderProductEvent>((event, emit) async => await repo.getMostOrder(
+          callback: (List<ProductItem> productItem) =>
+              {mostOrderproductItem = productItem, add(GetPaggerEvent())},
+        ));
     on<GetProductEvent>((event, emit) async => await repo.getFirstList(
           callback: (List<ProductItem> productItem) =>
               {this.productItem = productItem, add(GetPaggerEvent())},

@@ -69,19 +69,8 @@ class ProfileRepository {
         .doc(uid)
         .get()
         .then((DocumentSnapshot snapshot) {
-      UserModel userModel = UserModel.fromMap(snapshot as Map<String, dynamic>);
-
-      // UserModel(
-      //   name: snapshot['name'],
-      //   email: snapshot['email'],
-      //   createdAt: snapshot['createdAt'],
-      //   bio: snapshot['bio'],
-      //   uid: snapshot['uid'],
-      //   profilePic: snapshot['profilePic'],
-      //   phoneNumber: snapshot['phoneNumber'],
-      //   address:
-      // );
-
+      UserModel userModel =
+          UserModel.fromMap(snapshot.data() as Map<String, dynamic>);
       userCallBack(userModel);
     });
   }

@@ -1,4 +1,5 @@
-import 'package:farmfresh/module/order_module/order_list_module/model/place_order.dart';
+import 'package:farmfresh/module/bag_module/model/bag_model.dart';
+import 'package:farmfresh/module/checkout_module/model/place_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

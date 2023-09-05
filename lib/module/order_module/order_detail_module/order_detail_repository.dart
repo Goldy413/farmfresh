@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:farmfresh/module/order_module/order_list_module/model/place_order.dart';
+import 'package:farmfresh/module/checkout_module/model/place_order.dart';
 import 'package:farmfresh/utility/app_constants.dart';
 
 class OrderDetailRepository {
